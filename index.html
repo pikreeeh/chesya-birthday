@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Birthday Letter</title>
+  <!-- Handwritten font -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: 
+      linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+      url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      overflow: hidden;
+    }
+
+    .envelope {
+      width: 200px;
+      height: 120px;
+      position: relative;
+      cursor: pointer;
+      border: 2px solid #ff69b4;
+      border-radius: 6px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      margin-top: 60px;
+      animation: wiggle 3s ease-in-out infinite;
+    }
+
+    .envelope::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 100px solid transparent;
+      border-right: 100px solid transparent;
+      border-bottom: 60px solid #ff69b4; /* flap */
+    }
+
+    .envelope::after {
+      content: '';
+      position: absolute;
+      top: 60px;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: linear-gradient(to bottom right, #fff 50%, #ffb6c1 50%);
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(2deg); }
+      50% { transform: rotate(-2deg); }
+      75% { transform: rotate(1deg); }
+    }
+
+    .title {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.8em;
+      color: #ff4fa0;
+      font-family: 'Pacifico', cursive;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+      white-space: nowrap;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 8px 15px;
+      border-radius: 10px;
+      display: inline-block;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+
+    .subtitle {
+      margin-top: 20px;
+      font-size: 1.1em;
+      color: #ff2e81;
+      font-weight: bold;
+      text-align: center;
+      animation: fadeIn 2s ease forwards;
+      opacity: 0;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 8px 15px;
+      border-radius: 10px;
+      display: inline-block;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .modal-content {
+      background: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      max-width: 350px;
+      width: 90%;
+      position: relative;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    .modal-content img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: pink;
+      color: #fff;
+      font-size: 1.1em;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      margin: 10px 0;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn:hover { background: hotpink; }
+
+    .letter {
+      display: none;
+      text-align: left;
+      margin-top: 15px;
+      font-size: 1em;
+      line-height: 1.4em;
+      color: #333;
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+    }
+
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 10px; }
+
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 1.5em;
+      color: #888;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .close:hover { color: hotpink; }
+
+    .heart {
+      position: fixed;
+      bottom: 0;
+      font-size: 20px;
+      color: hotpink;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="title">Birthday Letter</div>
+  <div class="envelope" id="envelope"></div>
+  <div class="subtitle">Hi bubby ada surat ni, buka donkk 💌</div>
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <span class="close" id="closeBtn">&times;</span>
+
+      <div id="initialContent">
+        <img src="chesya.jpg" alt="Pacar">
+        <button class="btn" id="openLetterBtn">💌 Buka Surat</button>
+
+        <div class="spotify-embed">
+          <iframe style="border-radius:12px" 
+            src="https://open.spotify.com/embed/playlist/4xLEAz4q5R4Hkf63AFsrEN?utm_source=generator"
+            width="100%" height="152" frameBorder="0"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+          </iframe>
+        </div>
+      </div>
+
+      <div class="letter" id="letter">
+        <div id="letterText"></div>
+        <div class="nav-buttons">
+          <button class="btn" id="prevPageBtn">⬅ Back</button>
+          <button class="btn" id="nextPageBtn">Next ➡</button>
+        </div>
+        <button class="btn" id="backBtn">⬅ Kembali ke Foto</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    const envelope = document.getElementById('envelope');
+    const modal = document.getElementById('modal');
+    const openLetterBtn = document.getElementById('openLetterBtn');
+    const letter = document.getElementById('letter');
+    const letterTextDiv = document.getElementById('letterText');
+    const closeBtn = document.getElementById('closeBtn');
+    const backBtn = document.getElementById('backBtn');
+    const nextPageBtn = document.getElementById('nextPageBtn');
+    const prevPageBtn = document.getElementById('prevPageBtn');
+    const initialContent = document.getElementById('initialContent');
+
+    const letterParagraphs = [
+      "hi by.. happy 19 years old yaa bubbyy sayangku aka Chesya Erina Sandi, si mahasiswi baru paling cantikkk di BINUS Alsut yegaa.",
+      "hari ini di jam 00:00 resmi jadi awal perjalanan baru buat kamu bubby di umur 19 tuh sweet banget tauu pasti penuh kejutan, penuh cerita baru, dan aku bersyukur banget bisa nemenin ayang masuk ke fasee ini. tau ga si dari sekian banyak orang di dunia, eh aku yang paling beruntung tauu bisa dipanggil 'ayang' sama kamu wlee.",
+      "aku tau bubby ku itu suka boneka so jaga cellyy yaahh buat aku. dan sebenernya aku sukaa selalu di prioritasin kabar kabar kamu setiap hari byy i really feel loved makaci yahh uda jadi pribadi yang baikkk ke akuu, dan itu salah satu alesan aku ngerasa dicintain sama kamu lebi dari cukuppp inget LEBIH DARI CUKUPP BYYY.",
+      "ches kamu sekarang udah jadi mahasiswi mungkin gaterasa yaa udah makin dewasa, tapi ada satu pesann yang paling urgent nii tau gaa keuangan itu penting bubbyyy. gapapa si tapi atleast cobaa buat manage pelan pelan ya, namanya juga princess, dompetnya pasti butuh pangeran cadangan buat ngingetin. jadi tenang aja, aku ga bakal bosen nemenin ayang belajar ngatur uang, pelan-pelan sambil kita ketawa bareng.",
+      "and i pray for ayanggg di umur 19 ini: semoga selalu healthy terus yaa jarangin sakit nya ya Allah terus, selalu bahagia, kuliahnya lancar, and having a good friends around youu, and selalu jadi pusat warna pink yang nyemangatin semua orang di sekitar kamu yaa terutama sultann. aku juga berharap bubby bisa terus clingy ke aku aja, jangan ke orang lain yahh wlee, biar aku selalu jadi tempat paling nyaman buat bubby pulankk.",
+      "terakhir, aku mau bilang terima kasih. terima kasih udah jadi girlfriend yang selalu hadir buat aku, made me smile everyday, and always memorized me something important, god how lucky i am to meet you. aku bangga sama bubby.. aku cinta sama bubby.. AND I CANT EVEN WAIT TO SEE semua hal hebat yang bakal kamuu capai di umur 19 ini.",
+      "once again happy sweet nineteen, my lovely pinky chesyaaaa. selalu jadi tempat pulang aku yaa im proud of you babe..."
+    ];
+
+    let currentPage = 0;
+
+    envelope.addEventListener('click', () => {
+      modal.style.display = 'flex';
+      letter.style.display = 'none';
+      initialContent.style.display = 'block';
+      confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+    });
+
+    openLetterBtn.addEventListener('click', () => {
+      initialContent.style.display = 'none';
+      letter.style.display = 'block';
+      showPage(currentPage);
+    });
+
+    backBtn.addEventListener('click', () => {
+      letter.style.display = 'none';
+      initialContent.style.display = 'block';
+    });
+
+    closeBtn.addEventListener('click', () => { modal.style.display = 'none'; });
+
+    nextPageBtn.addEventListener('click', () => {
+      if (currentPage < letterParagraphs.length - 1) { currentPage++; showPage(currentPage); }
+    });
+
+    prevPageBtn.addEventListener('click', () => {
+      if (currentPage > 0) { currentPage--; showPage(currentPage); }
+    });
+
+    function showPage(index) {
+      letterTextDiv.innerHTML = "";
+      typeWriter(letterParagraphs[index], letterTextDiv);
+      prevPageBtn.style.display = index === 0 ? "none" : "inline-block";
+      nextPageBtn.style.display = index === letterParagraphs.length - 1 ? "none" : "inline-block";
+    }
+
+    function typeWriter(text, element) {
+      let i = 0;
+      element.innerHTML = '';
+      const interval = setInterval(() => {
+        if (i < text.length) { element.innerHTML += text.charAt(i); i++; }
+        else { clearInterval(interval); }
+      }, 40);
+    }
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = '💖';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+    setInterval(createHeart, 800);
+  </script>
+</body>
+</html>
